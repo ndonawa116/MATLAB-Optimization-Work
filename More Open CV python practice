@@ -1,0 +1,42 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+This is a temporary script file.
+"""
+import cv2 as cv  #importing cv libraries
+import matplotlib.pyplot as plt #importing matplot library 
+
+img = cv.imread('pupper_2.jpg',1) # read image in 
+#
+#img= cv.cvtColor(img,cv.COLOR_BGR2RGB) # convert color space of the image to RGB 
+#img_hsv = cv.cvtColor(img,cv.COLOR_BGR2HSV) # turns the color space to a representation of Hue saturation and Value
+#
+#
+##plt.imshow(img)
+img2 = cv.Canny(img,65,150) # setting intesity of the Canny filter 
+#fig= plt.figure() # plots the figure 
+#pic1= fig.add_subplot(2,2,1) # plots the figure 
+#pic1.imshow(img)
+#pic2 = fig.add_subplot(2,2,2) # plots the figure 
+#pic2.imshow(img2)
+#pic3 =  fig.add_subplot(2,2,3) # plots the figure 
+#pic3.imshow(img_hsv)
+#pic4 = fig.add_subplot(2,2,4)
+#img3 =  cv.Canny(img_hsv,85,180)
+#pic4.imshow(img3)
+
+#img = cv.bitwise_not('pupper_2.jpg',1)
+plt.xticks([100]) #define what values of y scale you want visible in the plot 
+plt.yticks([100]) # define what values of y scale you want visible in the plot 
+plt.imshow(img)
+plt.imshow(img2)
+
+
+img = cv.imshow('cup',img)
+img = cv.imread('pupper.jpg', cv.IMREAD_GRAYSCALE) # convert the image to gray scale
+cv.imshow('image',img) #display the image
+cv.waitKey(50000) # wait 50 seconds to close the window 
+cv.destroyAllWindows() # destroys all windows
+img = cv.namedWindow('shannon.jpg', cv.WINDOW_AUTOSIZE) 
+cv.waitkey(5000)# wait function for image to show 
