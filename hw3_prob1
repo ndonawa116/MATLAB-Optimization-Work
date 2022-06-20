@@ -1,0 +1,72 @@
+viz_func=@(x,y) (-exp(-(x./4).^2))./((x.^2-2.*y).^2 +5);
+h=figure;fcontour(viz_func,[-4 4 -4 4]);hold on; 
+xlabel('x')
+ylabel('y')
+
+% Initialize
+x_star=-3;
+y_star=-3;
+dx=1;
+dy=1;
+
+Iter=10; % total number of iterations
+gifFrames = []; % for gif animation
+
+for ii = 1:Iter
+    
+   %9 point grid 
+    x(1)=x_star-dx;y(1)=y_star-dx;
+    x(2)=x_star-dx;y(2)=y_star;
+    x(3)=x_star-dx;y(3)=y_star+dx;
+    x(4)=x_star;y(4)=y_star-dx;
+    x(5)=x_star;y(5)=y_star;
+    x(6)=x_star;y(6)=y_star+dx;
+    x(7)=x_star+dx;y(7)=y_star-dx;
+    x(8)=x_star+dx;y(8)=y_star;
+    x(9)=x_star+dx;y(9)=y_star+dx;
+    T= viz_func(x,y);
+    [~,index]=min(T); 
+    
+    
+    fcontour(viz_func,[-4 4 -4 4]);hold on; %Creating Countour plot 
+    xlabel('x')
+    ylabel('y')
+    title(['Grid (Iteration)  ' num2str(ii)]);
+    plot(x,y,'or');
+    plot(x([1,3,9,7,1,4,6,5,8,2]),y([1,3,9,7,1,4,6,5,8,2]),'r')
+    pause(1);
+    gifFrames{end+1} = getframe(h); 
+    plot(x(index),y(index),'*k','MarkerSize',10);
+    hold off;
+    pause(1);
+    gifFrames{end+1} = getframe(h); 
+    
+    % updating grid
+    x_star=x(index)
+    y_star=y(index)
+    if (index == 5)
+        dx=dx/2;
+        dy=dy/2;
+    end
+end
+x_star
+y_star
+
+
+ % making gif portion 
+axis tight manual 
+filename = 'marchiing_grid.gif';
+for n = 1:length(gifFrames)
+  
+  frame = gifFrames{n}; 
+  im = frame2im(frame); 
+  [imind,cm] = rgb2ind(im,256); 
+  
+  if n == 1 
+      imwrite(imind,cm,filename,'gif', 'Loopcount',inf); 
+  else 
+      imwrite(imind,cm,filename,'gif','WriteMode','append','DelayTime', 1); 
+  end 
+end
+
+
