@@ -1,0 +1,193 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Mar  1 15:07:03 2020
+
+@author: ndonawa
+"""
+import cv2 as cv 
+import numpy as np
+
+# Example 2.1: how to apply a low pass filter (how to blur) an image 
+#img  = cv.imread('leaf_one_v1.jpg')
+#rows, cols = img.shape[:2]
+#
+#identity_kernel = np.array([[0,0,0],[0,1,0],[0,0,0]])
+#kernel_3x3 = np.ones((3,3), np.float32) / 9.0 #Divides by 9 to normalize the kernel
+#kernel_5x5 = np.ones((5,5), np.float32) / 25.0 #divides by 25 to normalize the kernel
+#
+#cv.imshow('Original', img)
+#
+##value -1 is to maintain source image depth 
+#output = cv.filter2D(img, -1, identity_kernel)
+#cv.imshow('identity filter', output)
+#
+#output =  cv.filter2D(img, -1, kernel_3x3)
+#cv.imshow('3x3 filter', output)
+#
+#output = cv.filter2D(img, -1, kernel_5x5)
+#cv.imshow('5x5 filter', output)
+#
+#
+#cv.waitKey(0)
+
+# end of code *******************************
+
+
+#Example 2.2: Motion blur
+#img  = cv.imread('leaf_one_v1.jpg')
+#cv.imshow('Original image',img)
+#
+#size = 15
+#
+##generating the kernel 
+#kernel_motion_blur = np.zeros((size,size))
+#kernel_motion_blur [int((size-1)/2), :] = np.ones(size)
+#kernel_motion_blur = kernel_motion_blur/size
+#
+##applying the kernel to the input image
+#output = cv.filter2D(img,-1,kernel_motion_blur)
+#
+#cv.imshow('Motion blur', output)
+#cv.waitKey(0)
+
+
+#Example 2.3: Image sharpening and edge enhancement filter 
+img  = cv.imread('leaf_one_v1.jpg')
+cv.imshow('Original image', img)
+
+#Genereating the sharpening kernel 
+kernel_sharpen_1 = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
+kernel_sharpen_2 = np.array([[1,1,1],[1,-7,1], [1,1,1]])
+kernel_sharpen_3 = np.array([[-1,-1,-1,-1,-1],
+                              [-1,2,2,2,-1],
+                              [-1,2,8,2,-1],
+                              [-1,2,2,2,-1],
+                              [-1,-1,-1,-1,-1]]) / 8.0
+
+ #applying the different kernels to the input image 
+
+output_1 = cv.filter2D(img,-1,kernel_sharpen_1)
+output_2 = cv.filter2D(img,-1,kernel_sharpen_2)
+output_3 = cv.filter2D(img,-1,kernel_sharpen_3)
+
+cv.imshow('Sharpening', output_1)
+cv.imshow('Excessive Sharpening', output_2)
+cv.imshow('Edge Enhancement', output_3)
+
+cv.waitKey(0)
+
+#
+#img = cv.imread('leaf_one_v1.jpg')
+#img_scaled = cv.resize(img,None,fx=1.2, fy=1.2, interpolation = cv.INTER_LINEAR)
+#cv.imshow('Scaling - Linear Interpolation', img_scaled)
+#img_scaled = cv.resize(img,None,fx=1.2, fy=1.2, interpolation = cv.INTER_CUBIC)
+#cv.imshow('Scaling - Cubic Interpolation', img_scaled)
+#img_scaled = cv.resize(img,(450, 400), interpolation = cv.INTER_AREA)
+#cv.imshow('Scaling - Skewed Size', img_scaled)
+#cv.waitKey()
+
+
+# #Creating a Vignette Filter
+#img  = cv.imread('leaf_one_v1.jpg')
+#rows,cols  = img.shape[:2]
+#
+##generating vignette mask using gaussian kernels 
+#kernel_x = cv.getGaussianKernel(cols,150)
+#kernel_y = cv.getGaussianKernel(rows,150)
+#kernel = kernel_y * kernel_x.T
+#mask = 255 * kernel / np.linalg.norm(kernel)
+#output = np.copy(img)
+#
+## applying the maske to each channel in the input image 
+#for i in range(3):
+#    output[:,:,i] = output[:,:,i] * mask 
+#cv.imshow('Original', img)
+#cv.imshow('Vignette',output)
+#cv.waitKey(0)
+
+#img = cv.imread('leaf_one_v1.jpg')
+#
+#rows, cols = img.shape[:2]
+#
+##generating vignette mask using Gaussian kernels
+#kernel_x = cv.getGaussianKernel(int(cols*0.2), 200)
+#kernel_y = cv.getGaussianKernel(int(rows*0.2),200)
+#kernel = kernel_y * kernel_x.T
+#mask = 255*kernel/np.linalg.norm(kernel)
+#mask = mask[int(0.2 * rows):, int(0.2*cols):]
+#output = np.copy(img)
+#
+##applying the mask to each channel in the inpout image 
+#for i in range (3):
+#    output[:,:,i] = output[:,:,i]*mask 
+#    
+#    
+#cv.imshow('Input',img)
+#cv.imshow('Vignette with shifted focus', output)
+#cv.waitKey(0)
+
+# Contrast Enhancement Example with histogram equalization 
+#img = cv.imread('leaf_one_v1.jpg',0)
+#
+##equalize the histogram of the input image 
+#histeq = cv.equalizeHist(img)
+#
+#cv.imshow('Input', img)
+#cv.imshow('Histogram Equalized', histeq)
+#cv.waitKey(0)
+
+#Enhancing contrast in color images 
+#img  = cv.imread('leaf_one_v1.jpg')
+#img_yuv = cv.cvtColor(img,cv.COLOR_BGR2YUV)
+#
+##equalize the histogram of the Y channel
+#img_yuv[:,:,0] = cv.equalizeHist(img_yuv[:,:,0])
+#
+##convert the YUV image back to RGB format 
+#img_output = cv.cvtColor(img_yuv, cv.COLOR_YUV2BGR)
+#
+#cv.imshow('Color input Image', img )
+#cv.imshow('Histogram Equalized', img_output)
+#cv.waitKey(0)
+
+#input_image  = cv.imread('fishing.jpg')
+#gray_image = cv.cvtColor(input_image, cv.COLOR_BGR2GRAY)
+#
+##surf = cv.xfeatures2d.SURF_create()
+#surf = cv.xfeatures2d.SURF_create()
+#surf.setHessianTreshold(15000)
+#
+#keypoints, descriptors = surf.detectAndCompute(gray_image, None)
+#cv.drawKeypoints(input_image, keypoints, input_image, \
+# flags = cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS) 
+##cv.drawKeypoints (input_image, keypoints, input_image, color =(0,255,0), \ flags = cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+#cv.imshow('SURF features', input_image)
+#cv.waitKey()
+
+
+#*******************Using SIFT method to detect corners 
+#input_image  = cv.imread('fishing.jpg')
+#gray_image = cv.cvtColor(input_image, cv.COLOR_BGR2GRAY) 
+# 
+## For version opencv < 3.0.0, use cv2.SIFT()
+#surf = cv.xfeatures2d.SURF_create()
+#surf.setHessianThreshold(15000) 
+#keypoints, descriptors = surf.detectAndCompute(gray_image, None) 
+# 
+#
+#cv.drawKeypoints(input_image, keypoints, input_image,color= (0,0,255), \
+# flags = cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS) 
+# 
+#cv.imshow('SIFT features', input_image) 
+#cv.waitKey()
+
+
+
+
+
+
+
+
+
+
+
