@@ -1,0 +1,49 @@
+     %clear command window
+clear all;  % clear all 
+k = imread('wooden.jpg'); % read the image
+gk = rgb2gray(k); %convert the image to gray level 
+subplot(2,2,1); imshow(k); title('original image'); % display the image on the left of the screen 
+subplot (2,2,2); imshow(gk);title('gray converted image');% display the image on the right of the screen
+figure; %display the figure
+avg = fspecial('average'); % define the avg as the average filter.
+h_filter = imfilter(gk,avg); % apply the averageing filter to the gray image.
+h_lap =fspecial('laplacian'); % define apply the laplacian filter 
+subplot (2,1,1); imshow(h_filter); title(' gray filtered'); % displays the average filter of gray.
+subplot (2,1,2); imshow(gk);    title('original gray'); % displays the original gray image.
+ 
+t_level = graythresh(h_filter); % finds the threshold of the image.
+scal_level = t_level*255; % scales the thrshold value.
+new_im = gk; %output image originally equal to gray image.
+ 
+for c = 1:480 % checking in the rows.
+    for b = 1:640 %checking for the columns.
+        value = new_im(c,b); %set value to rows and columns 
+        if value < scal_level % if the value is greater that scales value.
+            new_im(c,b) = 0; %display 0 throughout the image.
+        else
+            new_im(c,b) = new_im(c,b); %else display the value.
+        end;
+    end;
+end;
+figure;%display the figure 
+subplot(1,2,1); imshow(new_im); title ('segmented'); %display the segmented image
+subplot (1,2,2); imshow(gk); title('gray filtered'); %display the gray filtered image.
+lap_image = imfilter( new_im, h_lap); % apply laplacian filter tp the segmented image 
+figure; %display in separate figure.
+subplot(1,2,1); imshow(lap_image); title('laplacian edge');
+subplot(1,2,2); imshow(gk); title('gray filtered image');
+ 
+j= edge(gk,'canny'); % apply the canny edge detector to the gray level image.
+figure;
+subplot(1,2,1); imshow(j); title('canny edge detector'); % display the image with canny edge detector 
+subplot(1,2,2); imshow(gk); title('gray filtered'); %display the gray filtered image.
+figure;%display on different figure.
+subplot(1,2,1); imshow(gk); title ('original gray image'); % show the original gray image.
+subplot(1,2,2); imshow(h_filter); title('gray average filter'); % show the gray averaging filter
+ 
+        
+       
+        
+ 
+
+
